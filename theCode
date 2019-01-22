@@ -1,0 +1,266 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.OutputStream;
+public class file {
+    //temporay array list with the results
+    private static ArrayList<String> temp=new ArrayList<>();
+    //window
+    static JFrame window = new JFrame();
+    //panels
+    private static JPanel mainPanel = new JPanel(new BorderLayout());
+    private static JPanel panelOfButtons = new JPanel();
+    //section 1 buttons
+    private static JButton function1 = new JButton("Murica");
+    private static JButton function2 = new JButton("Most Letters");
+    private static JButton function3 = new JButton("Backwards");
+    private static JButton function4 = new JButton("All Vowels");
+    //section 2 buttons
+    private static JButton function5 = new JButton("Minus One");
+    private static JButton function6 = new JButton("Anagram");
+    private static JButton function7 = new JButton("Here or There");
+    private static JButton function8 = new JButton("Crossword Solver");
+    // change file button
+    private static JButton changeFile = new JButton("change file");
+    // error label
+    private static Label errorMessage = new Label("you have selected an invalid file");
+    //need a new panel to hold the error message so it can be made visible and invisable
+    private static JPanel messages = new JPanel();
+    //output label
+    private static JLabel outputs = new JLabel();
+    //listing for inputs graphics interface
+    private static void buttons()throws IOException {
+        //setting the default file and creating its array for all the files
+        ArrayList<String> wordList = new ArrayList<>();
+        Scanner sc = new Scanner("englishwordlist.txt");
+        while (sc.hasNext()){
+            wordList.add(sc.nextLine());
+        }
+        //window stuff
+        window.setVisible(true);
+        window.setTitle("word stuff");
+        window.setSize(640,480);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //setting messages to be invisible so you don't see an error message 24/7
+        messages.setVisible(false);
+        //so the buttons do stuff each one calls the meathods and prints the resulting code
+
+        //and works with the set out put method to put it on screen
+        function1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                temp=murica(wordList);
+                for(int i=0;i<temp.size();i++){
+                    System.out.print(temp.get(i));
+                }
+
+
+            }
+        });
+        function2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //TODO put in the event
+                }
+        });
+        function3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        function4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        function5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        function6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        function7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        function8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO put in the event
+            }
+        });
+        changeFile.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // for when I want to choose another text file...
+                // by: Mr J
+                JFileChooser popup = new JFileChooser();
+                Scanner sc2 = null;
+                try {
+                    if (popup.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+                    {
+
+                        File selectedFile = popup.getSelectedFile();
+                        sc2 = new Scanner(selectedFile);
+                        //changing the word file
+                        int i=0;
+                        while (sc2.hasNext()){
+                            wordList.remove(1);
+                            wordList.add(i,sc2.nextLine());
+                        }
+                    }
+                    messages.setVisible(false);
+                }
+                catch (IOException i){
+                    messages.setVisible(true);
+                }
+
+            }
+        });
+
+        setOutput(outputs);
+        panelOfButtons.add(function1);
+        panelOfButtons.add(function2);
+        panelOfButtons.add(function3);
+        panelOfButtons.add(function4);
+        panelOfButtons.add(function5);
+        panelOfButtons.add(function6);
+        panelOfButtons.add(function7);
+        panelOfButtons.add(function8);
+        panelOfButtons.add(changeFile);
+        mainPanel.add(panelOfButtons);
+        mainPanel.add(outputs);
+        messages.add(errorMessage);
+        window.add(messages);
+        window.add(mainPanel);
+
+
+    }
+    //method that displays outputs in the console into the window
+    public static void setOutput(final JLabel label) {
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                char c = (char) b;
+                if (c == '\n' || c == '\r') {
+                    label.setText("");
+                } else {
+                    label.setText(label.getText() + c);
+                }
+            }
+        }));
+    }
+
+
+    public static void main (String[]args)throws IOException{
+        buttons();
+    }
+    //solves the murica problem
+    private static ArrayList<String> murica(ArrayList<String> array){
+        ArrayList<String> result= new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            if(array.get(i).length()%2==0){
+                result.add(array.get(i));
+            }
+        }
+        for (int i=0;i<result.size();i++){
+            for (int o=1;o<result.get(i).length();i=2){
+                if(!checkIfUS(result.get(i).substring(o-1,o))){
+                    result.remove(i);
+                }
+            }
+        }
+        return result;
+    }
+
+    //just a bunch of if statements to check ifs the us states
+    private static boolean checkIfUS(String two){
+        if(two.equals("al")){return true;}
+        else if (two.equals("ak")){return true;}
+        else if (two.equals("az")){return true;}
+        else if (two.equals("ar")){return true;}
+        else if (two.equals("ca")){return true;}
+        else if (two.equals("co")){return true;}
+        else if (two.equals("ct")){return true;}
+        else if (two.equals("de")){return true;}
+        else if (two.equals("fl")){return true;}
+        else if (two.equals("ga")){return true;}
+        else if (two.equals("hi")){return true;}
+        else if (two.equals("id")){return true;}
+        else if (two.equals("il")){return true;}
+        else if (two.equals("ia")){return true;}
+        else if (two.equals("ks")){return true;}
+        else if (two.equals("ky")){return true;}
+        else if (two.equals("la")){return true;}
+        else if (two.equals("me")){return true;}
+        else if (two.equals("md")){return true;}
+        else if (two.equals("ma")){return true;}
+        else if (two.equals("mi")){return true;}
+        else if (two.equals("mn")){return true;}
+        else if (two.equals("ms")){return true;}
+        else if (two.equals("mo")){return true;}
+        else if (two.equals("mt")){return true;}
+        else if (two.equals("nv")){return true;}
+        else if (two.equals("nh")){return true;}
+        else if (two.equals("nj")){return true;}
+        else if (two.equals("nm")){return true;}
+        else if (two.equals("ny")){return true;}
+        else if (two.equals("nc")){return true;}
+        else if (two.equals("nd")){return true;}
+        else if (two.equals("oh")){return true;}
+        else if (two.equals("ok")){return true;}
+        else if (two.equals("or")){return true;}
+        else if (two.equals("pa")){return true;}
+        else if (two.equals("ri")){return true;}
+        else if (two.equals("sc")){return true;}
+        else if (two.equals("sd")){return true;}
+        else if (two.equals("tn")){return true;}
+        else if (two.equals("tx")){return true;}
+        else if (two.equals("ut")){return true;}
+        else if (two.equals("vt")){return true;}
+        else if (two.equals("va")){return true;}
+        else if (two.equals("wa")){return true;}
+        else if (two.equals("wv")){return true;}
+        else if (two.equals("wi")){return true;}
+        else if (two.equals("wy")){return true;}
+        else {return false;}
+    }
+
+    private static ArrayList<String> mostLetters(ArrayList<String> array){
+        ArrayList<String> results = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            for (int o=0;i<array.get(i).length();o++){
+
+            }
+        }
+        return results;
+    }
+    private static ArrayList<String> minusOne(String word, ArrayList<String> array){
+        StringBuilder sb = new StringBuilder(word);
+        ArrayList<String> result= new ArrayList<>();
+        for (int i=0;i<word.length();i++){
+            for(int o=0;o<array.size();o++){
+                if(sb.deleteCharAt(i).equals(array.get(o))){
+                    result.add(array.get(o));
+                }
+            }
+        }
+        return result;
+    }
+}
