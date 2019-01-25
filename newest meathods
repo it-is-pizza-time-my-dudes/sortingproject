@@ -1,0 +1,68 @@
+ private static ArrayList<String> backwards(ArrayList<String> array){
+        ArrayList<String> result = new ArrayList<>();
+        for (int i=0;i<array.size()-1;i++){
+            String word=array.get(i);
+            for(int k=0;k<word.length()-1;k++){
+                String temp=word.substring(k);
+                word.replace(word.substring(k),word.substring(word.length()-i-1));
+                word.replace(word.substring(word.length()-k-1),temp);
+            }
+            if (!array.get(i).equals(word)){
+                for (int k=0;k<array.size()-1;k++){
+                    if (word.equals(array.get(k))){
+                        result.add(array.get(i));
+                        k=array.size()-1;
+                    }
+                }
+            }
+        }
+        return result; 
+    }
+    private static ArrayList<String> oddEven(ArrayList<String> array){
+        ArrayList<String> result = new ArrayList<>();
+        for (int i=0;i<array.size()-1;i++){
+            if (array.get(i).length()>=5){
+                if (array.get(i).length()==5){
+                    if(checkOdd(array.get(i),array)){
+                        result.add(array.get(i));
+                    }
+                }
+                else{
+                    if(checkOdd(array.get(i),array)){
+                        result.add(array.get(i));
+                    }
+                    else if(checkEven(array.get(i),array)){
+                        result.add(array.get(i));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    private static boolean checkOdd(String word,ArrayList<String> array){
+        String result="                                                                                  ";
+        for (int i=0;i<word.length()-1;i+=2){
+            result.replaceFirst(" ",word.substring(i));
+        }
+        result.trim(); 
+        for (int i=0;i<array.size()-1;i++){
+            if (result.equals(array.get(i))){
+                return true; 
+            }
+        }
+        return false;
+    }
+    private static boolean checkEven(String word,ArrayList<String> array){
+        String result="                                                                                  ";
+        for (int i=1;i<word.length()-1;i+=2){
+            result.replaceFirst(" ",word.substring(i));
+        }
+        result.trim(); 
+        for (int i=0;i<array.size()-1;i++){
+            if (result.equals(array.get(i))){
+                return true; 
+            }
+        }
+        return false;
+    }
+}
